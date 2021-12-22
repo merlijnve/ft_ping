@@ -1,2 +1,2 @@
 # ft_ping
-Recoding of the ping command
+Recoding the ping command
