@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   ft_ping.h                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mvan-eng <mvan-eng@student.codam.nl>         +#+                     */
+/*   By: merlijn <merlijn@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2019/07/23 16:26:22 by mvan-eng       #+#    #+#                */
-/*   Updated: 2019/10/14 20:42:04 by mvan-eng      ########   odam.nl         */
+/*   Created: 2022/01/11 11:08:55 by merlijn       #+#    #+#                 */
+/*   Updated: 2022/01/11 15:42:00 by merlijn       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,4 +14,13 @@
 
 # define FT_PING_H
 
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netdb.h>
+# include <arpa/inet.h>
+# include <unistd.h> // maybe not needed
+ 
 #endif
