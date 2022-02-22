@@ -11,45 +11,66 @@
 /* ************************************************************************** */
 
 #include "ft_ping.h"
+#include <errno.h>
 
 void	exit_msg(char *msg, int code) 
 {
-	printf("%s", msg);
+	printf("%s\n", msg);
 	exit(code);
+}
+
+int icmp_seq = 1;
+
+void	pinger()
+{
+	printf("64 bytes from 8.8.8.8: icmp_seq=%d ttl=42 time=1.11ms\n", icmp_seq);
+	icmp_seq++;
+	alarm(1);
 }
 
 int	main(int argc, char **argv)
 {
-	struct addrinfo	*res;
+	struct addrinfo	hints;
+	struct addrinfo *res;
 	int				socketd;
-	int				option_value;
+	int				on;
 	
-	option_value = 1;
+	on = 1;
+	ft_bzero(&hints,sizeof(struct addrinfo));
+	hints.ai_family = AF_INET;
 	printf("%s\n", argv[1]);
+	
 	// // list all sockets for given hostname/ip
 	// getaddrinfo(argv[1], NULL, NULL, &res);
 	
-	// initialise a socket for a socketfd
-	socketd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+	// initialise a RAW ICMP socket
+	// returns a socket descriptor
+	// POSSIBILITY FOR SWITCHING BETWEEN IPV4/IPV6 HERE
+	printf("getting socket descriptor...\n");
+	socketd = socket(AF_INET, SOCK_DGRAM, IPPROTO_ICMP);
 	if (socketd == -1)
 	{
+		perror("");
+		printf("errno: %d\n", errno);
 		exit_msg("Socket initialisation failed\n", -1);
 	}
 	// set socket options
-	printf("socketd: %i\n", socketd);
-	setsockopt(socketd, IPPROTO_ICMP,IP_HDRINCL, &option_value, sizeof(option_value));
-
-	for (res = res; res != NULL; res = res->ai_next)
+	//getaddrinfo
+	if (getaddrinfo("google.com", NULL, &hints, &res) != 0) 
 	{
-		// sendto(socketfd, )
+		printf("%d", getaddrinfo("google.com", NULL, &hints, &res));
+		printf("errno: %d\n", errno);
+		printf("%p\n", res->ai_addr);
+		perror("getaddrinfo: ");
 	}
-
 	// send a ECHO_REQUEST to socket address
 	// start time
 	// sendto(AF_INET, );
-
 	// catch echo
 	// end time
-
+	signal(SIGALRM, pinger);
+	alarm(1);
+	while(1);
+	printf("finished\n");
 	return (0);
 }

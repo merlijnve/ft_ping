@@ -19,8 +19,9 @@
 # include <sys/time.h>
 # include <sys/types.h>
 # include <sys/socket.h>
+# include <signal.h>
 # include <netdb.h>
 # include <arpa/inet.h>
 # include <unistd.h> // maybe not needed
- 
+# include "./libft/srcs/libft.h"
 #endif

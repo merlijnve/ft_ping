@@ -16,7 +16,7 @@ NAME	= ft_ping
 SRCS	=	main.c
 OBJS	= $(SRCS:.c=.o)
 
-GCC		= gcc
+GCC		= clang
 FLAGS	= -Wall -Wextra -Werror
 
 all:	$(NAME)
@@ -25,7 +25,7 @@ all:	$(NAME)
 	@cd libft && make
 
 $(NAME):	$(OBJS)
-	$(GCC) $(FLAGS) -o $(NAME) $(OBJS)
+	$(GCC) $(FLAGS) -L ./libft -lft -o $(NAME) $(OBJS)
 
 %.o: %.c $(HEADER_FILE)
 	$(GCC) -c $< -o $(<:.c=.o)
