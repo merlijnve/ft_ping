@@ -13,22 +13,21 @@
 HEADER_FILE = ft_ping.h
 NAME	= ft_ping
 
-SRCS	=	main.c
-OBJS	= $(SRCS:.c=.o)
+SRC	=	main.c
+OBJ	= $(SRC:.c=.o)
 
 GCC		= clang
 FLAGS	= -Wall -Wextra -Werror
 
+LIB	= libft/libft.a
+
 all:	$(NAME)
-	@echo "Making ft_ping..."
+
+$(NAME): 	$(SRC)
 	@echo "Making libft..."
 	@cd libft && make
-
-$(NAME):	$(OBJS)
-	$(GCC) $(FLAGS) -L ./libft -lft -o $(NAME) $(OBJS)
-
-%.o: %.c $(HEADER_FILE)
-	$(GCC) -c $< -o $(<:.c=.o)
+	@echo "Making ft_ping..."
+	$(GCC) $(FLAGS) $(SRC) $(LIB) -o $(NAME)
 
 clean:
 	@echo "Cleaning ft_ping..."

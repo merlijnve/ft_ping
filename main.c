@@ -32,13 +32,15 @@ int	main(int argc, char **argv)
 {
 	struct addrinfo	hints;
 	struct addrinfo *res;
+	struct addrinfo *tmp;
 	int				socketd;
 	int				on;
-	
+	void *packet;	
+
 	on = 1;
 	ft_bzero(&hints,sizeof(struct addrinfo));
 	hints.ai_family = AF_INET;
-	printf("%s\n", argv[1]);
+	printf("%s, on: %d, argc: %p\n", argv[1], on, &argc);
 	
 	// // list all sockets for given hostname/ip
 	// getaddrinfo(argv[1], NULL, NULL, &res);
@@ -50,27 +52,38 @@ int	main(int argc, char **argv)
 	socketd = socket(AF_INET, SOCK_DGRAM, IPPROTO_ICMP);
 	if (socketd == -1)
 	{
-		perror("");
+		perror("socket: ");
 		printf("errno: %d\n", errno);
 		exit_msg("Socket initialisation failed\n", -1);
 	}
-	// set socket options
+	// set socket options??
 	//getaddrinfo
 	if (getaddrinfo("google.com", NULL, &hints, &res) != 0) 
 	{
-		printf("%d", getaddrinfo("google.com", NULL, &hints, &res));
 		printf("errno: %d\n", errno);
-		printf("%p\n", res->ai_addr);
 		perror("getaddrinfo: ");
+		exit_msg("Getting address info failed\n", -1);
 	}
+	for (tmp = res; tmp != NULL; tmp = tmp->ai_next) {
+		printf("ai_flags: %d, ai_family: %d, ai_socktype: %d\n", res->ai_flags, res->ai_family, res->ai_socktype);
+		printf("sockaddr family: %d, sockaddr:%s\n", res->ai_addr->sa_family, res->ai_addr->sa_data);
+	char *s;
+	s = malloc(sizeof(char *));
+	printf("inet_ntop: %s, canonname: %s\n", inet_ntop(AF_INET, res, s, res->ai_addrlen),res->ai_canonname);
 	// send a ECHO_REQUEST to socket address
 	// start time
-	// sendto(AF_INET, );
+	if (sendto(socketd, packet, sizeof(packet), 0, res->ai_addr, res->ai_addrlen))
+	{
+		perror("sendto: ");
+		//exit_msg("Sendto failed\n", -1);
+	}
+	}
 	// catch echo
 	// end time
 	signal(SIGALRM, pinger);
 	alarm(1);
 	while(1);
 	printf("finished\n");
+	freeaddrinfo(res);
 	return (0);
 }
